@@ -40,12 +40,12 @@ You will need Python installed (>= 3.9), and added to path. You will also need p
 ### [DISCORD]
 1) Head over to https://discord.com/developers and log-in / create an account. Then click on Applications on the left hand sidebar and create an Application. <br>
 2) Name it whatever you want, then click on Bot and Reset Token. Now your bot token will be visible. MAKE SURE TO KEEP THIS PRIVATE AS THAT CAN LEAD TO THE BOT EXECUTING COMMANDS FROM A THIRD PARTY. <br>
-3) Copy and Paste this token into the config file in ii7-Stream-Notifier/config/config.ini under [DISCORD]. <br>
+3) Copy and Paste this token into the config file in ii7-Stream-Notifier/config/config.ini under [DISCORD]. Then copy the Channel ID of the text channel for the bot to send notifications to. (Enable developer mode then right-click the channel -> copy ID) <br>
 4) Lastly, click on OAuth2 on the left sidebar and click on URL Generator. Select Bot, and give it the "Send Messages", "Use Slash Commands", and the "Embed links" permissions at minimum. Copy that link and paste it into google. Select your server and invite your bot to it. <br>
 
 
 ### [TWITCH]
-**NOTE**: You do not need to use the Twitch API so this does not need to be filled **so long as scrape = 1** however this does mean that the bot **will not tell you how many concurrent viewers are watching and instead display it as None (will make it show something else later)**.
+**NOTE**: You do not need to use the Twitch API so this does not need to be filled **so long as scrape = 1** however this does mean that the bot **will not tell you how many concurrent viewers are watching and instead display it as None (will make it show something else later) Otherwise follow the steps specified and ignore access_token as that will be generated automatically**.
 
 1) Go to https://dev.twitch.tv/ and log-in with your Twitch account.
 2) Click on "Your Console" next to your profile in the top-right corner and then click "Register Your Application".

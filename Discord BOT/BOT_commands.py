@@ -109,7 +109,6 @@ async def sync(interaction: discord.Interaction):
     await interaction.response.send_message(f"Synced!")
 
 
-
 @app_commands.checks.has_permissions(administrator=True)
 @tree.command(name='reset', description='Reset certain properties of all streamers (Owner only)')
 async def reset(interaction: discord.Interaction, property : str) -> None:
@@ -131,6 +130,23 @@ async def reset(interaction: discord.Interaction, property : str) -> None:
     await interaction.response.send_message(f"Success!")
 
 
+@app_commands.checks.has_permissions(administrator=True)
+@tree.command(name="logs", description='Read the latest 50 lines within the logs')
+async def logs(interaction : discord.Interaction) -> None:
+    with open('files/logs.log') as logs:
+        lines = logs.readlines()
+
+    if not len(lines):
+        await interaction.response.send_message("The log file is empty.") # Empty log file
+    
+    elif len(lines) >= 50:
+        message = []
+        for line in lines[-50:]:
+            message.append(line)
+        await interaction.response.send_message(f"```\n{''.join(message)}```")
+    
+    else:
+        await interaction.response.send_message(f"```\n{''.join(lines)}```") # Less than 50 lines
 
 
 @client.event

@@ -87,13 +87,9 @@ def process_streamers_data(streamers_data : list, servers : dict) -> None:
             update_streamer(info_dict['uploader_url'], info_dict['live_status'])
 
 def main_loop():
-    iteration = 0
     while True:
         streamers_data = get_all_streamers_data()
-        iteration += 1
-
         process_streamers_data(streamers_data, servers)
-
         log_wp.info("Sleeping for 5 minutes. \n")
         sleep(300)
 

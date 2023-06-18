@@ -22,6 +22,10 @@ def follow():
         print("Make sure not to leave any forward-slashs at the end of the URL")
         return
     
+    if not('www' in url):
+        print('Make sure to inlcude www. in your URL, otherwise Twicth API pisses itself.')
+        return
+    
     cursor.execute(f"INSERT INTO streamers (URL, RECORDED_ACTIVITY, NAME) VALUES (?, ?, ?)", (url, "not_live", name.lower()))
     db.commit()
 

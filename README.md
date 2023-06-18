@@ -11,13 +11,8 @@ Personally, I think that Discord has recently made a series of bad decisions (Us
 Pushover is available on iOS & Android, it has a 30-day free trial and after that it has a $5 one-time purchase. This way I am not relying on any specific platform. For now though, this only works on Discord and Pushover.
 
 Limitations:
-- On scheduled stream notifications on Discord, it will strip the title of any non-ASCII (Anything not English + Some symbols) characters. To be honest I was just testing something and completely forgot to remove it. Will do so within the next change.
+- Poorly written (probably)
 - Probably has tons of bugs.
-
-TO-DO:
-- (Probably) re-write entirety of Discord/app.py
-- Clean streamers.py's ```fetch_streamer``` function. As it is a mess I think
-- Change the information displayed on each notification (example: on Twitch switch title with game category and only use avatars for the embed image, on YT remove amount of viewers and only use avatar image if it's a scheduled stream notification)
 
 ![Banner](https://github.com/ii7mood/ii7-Stream-Notifier/assets/86324776/2ecfe3e9-c4c0-4b10-be24-078171a55188)
 

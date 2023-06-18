@@ -72,7 +72,7 @@ def _fetch_twitch_information(streamer_url : str, stream_info = False) -> str:
             
             if stream_info:
                 stream = TwitchC.getStream(streamer_name)
-                return stream['data'][0]['viewer_count']
+                return [stream['data'][0]['viewer_count'], stream['data'][0]['game_name']]
 
             
             else:
@@ -157,31 +157,28 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
     with yt_dlp.YoutubeDL(yt_dlp_args) as ytd:
         info_dict = ytd.extract_info(url)
 
-        # If stream could not be found, create empty dictionary with bare minimum data to save to database
-        if info_dict is None:
+        if info_dict != None:
+            log_wp.info(f"Stream found. Status: {info_dict['live_status']}")
+
+            if info_dict['live_status'] != recorded_activity: # This will attempt to extract the avatar ONLY on the first detection where the notification will be sent.
+                info_dict['avatar_url'] = _fetch_avatar_url(url, yt_dlp_args)  # Rather than extract the avatar every detection where notifications won't be sent and this is just useless.
+                # This is important because _fetch_avatar_url takes a long time depending on whether it is scraping or not and whether Twitch servers are feeling good or not.
+            
+            if info_dict['live_status'] == "is_upcoming":
+                if (((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600) > 24): # Avoid scheduled streams that will start in over 24 hours
+                    info_dict['live_status'] = 'not_live'
+                    log_wp.info("Scheduled stream will start in over 24 hours so we will set it to not_live and ignore it.") # This does mean that avatar will be generated everytime though.
+            
+            if (platform == "twitch") and (info_dict['live_status'] == 'is_live'): # With YouTube viewer count is extracted automatically while Twitch not. So we will extract it manually using Twitch API. (if enabled)
+                twitch_ext = _fetch_twitch_information(url, stream_info=True)
+                info_dict['concurrent_view_count'] = twitch_ext[0]
+                info_dict['category_name'] = twitch_ext[1]
+        
+        else: # Stream does not exist so just populate this with bare minimum data to save to DB.
             info_dict = {}
-            info_dict['live_status'] = 'not_live'   
+            info_dict['live_status'] = 'not_live'
             info_dict['uploader_url'] = url.replace('/live', '')
-            #Stream is offline, info_dict is empty. Populating with bare minimum data
-
-        else:
-            log_wp.info(f"Stream found, live_status : {info_dict['live_status']}")
-            # Get avatar thumbnail URL from video information if a change in activity is detected, otherwise ignore as it saves time
-            if info_dict['live_status'] != recorded_activity:
-                avatar_url = _fetch_avatar_url(url, yt_dlp_args) # keeping /live at the end of a YT url will redirect to live-stream so we remove it
-                info_dict['avatar_url'] = avatar_url
-
-            # Ok we know that the there is a stream, but we do not know whether it is a schedule or live stream.
-            # This matters as we want to ignore scheduled streams that start in > 24 hours so:
-            if (info_dict['live_status'] == "is_upcoming") and (((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600) > 24):
-                info_dict['live_status'] = "not_live"
-                log_wp.info("Scheduled stream will start in over 24 hours, set to not_live to be ignored.")
-            
-            # live twitch streams should have concurrent_view_count available via Twitch API (if enabled)
-            if platform == "twitch" and info_dict['live_status'] == "is_live":
-                info_dict['concurrent_view_count'] = _fetch_twitch_information(url, stream_info = True)
-
-            
+        
     # Add live status and previously recorded live stream status to video information
     info_dict['recorded_live_status'] = recorded_activity
     info_dict['platform'] = platform

@@ -21,7 +21,7 @@ def establish_connection(server_type):
 
     except ConnectionRefusedError:
         log_wp.warning(f"Failed to establish a connection to {server_type.value} socket. Connection Refused.")
-        return None, None
+        return None
 
 def initialize_servers():
     servers = {}
@@ -48,6 +48,7 @@ def send_data(data : dict, servers : dict) -> None:
         try:
             connection.sendall(pickle.dumps(data) + b"END")
 
+            connection.settimeout(5.0)
             reply = connection.recv(1024)
 
             if reply == b"DONE":
@@ -56,13 +57,18 @@ def send_data(data : dict, servers : dict) -> None:
             else:
                 log_wp.warning("Unexpected response from server, not sure what happened here. Attempting to re-establish a connection.")
                 connection.close()
-                server = establish_connection(server_type)
 
-                if server:
-                    servers[server_type] = server
+                sleep(2) # Give time for server to bind before we attempt to connect to it.
+                reconnect_server = establish_connection(server_type)
+
+                if reconnect_server[0]:
+                    servers[server_type] = reconnect_server
 
                 else:
                     log_wp.warning("Failed to re-establish the connection. Did the sever close?")
+
+        except TimeoutError:
+            log_wp.warning(f"Connection timed out. No reply from {server_type}. Moving on..")
 
         except ConnectionAbortedError:
             log_wp.warning(f"Failed to send data to {server_type}. Connection Aborted.")

@@ -1,5 +1,6 @@
 import requests
-from os import path, getcwd
+from os import getcwd
+from sys import path
 
 
 parent_path = getcwd().replace('/Discord BOT', '')

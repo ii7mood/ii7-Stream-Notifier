@@ -47,7 +47,7 @@ while True:
                 image_data=avatar,
                 priority=1
             )
-            log_wp.info(f"Stream started notification sent via Pushover for {info_dict['uploader']}\n")
+            log_wp.info(f"Stream started notification sent via Pushover for {info_dict['uploader']}")
         
         elif info_dict['live_status'] == 'is_upcoming':
             avatar = requests.get(info_dict['avatar_url']).content
@@ -60,7 +60,7 @@ while True:
                 image_data=avatar,
                 priority=0
             )
-            log_wp.info(f"Stream scheduled notification sent via Pushover for {info_dict['uploader']}\n")
+            log_wp.info(f"Stream scheduled notification sent via Pushover for {info_dict['uploader']}")
         
         conn.send(b"DONE")
 

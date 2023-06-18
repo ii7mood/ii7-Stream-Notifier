@@ -33,7 +33,7 @@ client = discord.Client(intents=intents)
 def embed_notification(info_dict : dict) -> discord.Embed:
 
     if info_dict['live_status'] == "is_live":
-        name = info_dict['name']
+        name = info_dict['uploader']
         stream_url = info_dict['original_url']
         avatar_url = info_dict['avatar_url']
         thumbnail = info_dict['thumbnail']
@@ -47,7 +47,7 @@ def embed_notification(info_dict : dict) -> discord.Embed:
 
         
 
-        embed_notif = discord.Embed(title=f'Stream is now live!', color=0x00ff00, url=stream_url)
+        embed_notif = discord.Embed(title=f'Stream is now live with {name}!', color=0x00ff00, url=stream_url)
         embed_notif.set_author(name=name, icon_url=avatar_url)
         embed_notif.set_image(url=thumbnail)
         embed_notif.add_field(name=fieldname, value=fieldvalue)
@@ -58,8 +58,8 @@ def embed_notification(info_dict : dict) -> discord.Embed:
     else: # If scheduled notification
         
         name = info_dict['uploader']
-        fieldname = info_dict['fulltitle']
-        fieldvalue = f"**__in {round(((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600), 1)} hours!__**"
+        fieldvalue = info_dict['fulltitle']
+        fieldname = f"**__Starting in {round(((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600), 1)} hours!__**"
         stream_url = info_dict['original_url']
         avatar_url = info_dict['avatar_url']
         thumbnail_url = info_dict['thumbnail']

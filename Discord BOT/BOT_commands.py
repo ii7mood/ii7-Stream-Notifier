@@ -5,8 +5,9 @@
 import discord
 from discord import app_commands
 import sqlite3
-from os import getcwd
+from os import getcwd, stat
 from sys import path
+from math import ceil
 
 parent_path = getcwd().replace('/Discord BOT', '')
 path.append(parent_path)
@@ -88,6 +89,12 @@ async def search(interaction: discord.Interaction, criteria : str) -> None:
         cursor.execute("SELECT * FROM streamers WHERE NAME = ?", (criteria,))
     
     query = cursor.fetchall()
+
+    if len(str(query)) > 2000:
+        for i in range(0, ceil(len(query) / 20)):
+            await interaction.channel.send(query[i * 20 : i * 20 + 20])
+        return
+        
     await interaction.response.send_message(query)
 
 
@@ -131,22 +138,22 @@ async def reset(interaction: discord.Interaction, property : str) -> None:
 
 
 @app_commands.checks.has_permissions(administrator=True)
-@tree.command(name="logs", description='Read the latest 50 lines within the logs')
+@tree.command(name="logs", description='Read the latest 2000 characters within the logs')
 async def logs(interaction : discord.Interaction) -> None:
-    with open('files/logs.log') as logs:
-        lines = logs.readlines()
 
-    if not len(lines):
-        await interaction.response.send_message("The log file is empty.") # Empty log file
-    
-    elif len(lines) >= 50:
-        message = []
-        for line in lines[-50:]:
-            message.append(line)
-        await interaction.response.send_message(f"```\n{''.join(message)}```")
-    
-    else:
-        await interaction.response.send_message(f"```\n{''.join(lines)}```") # Less than 50 lines
+    fsize = stat('files/logs.log').st_size
+    n = 1992 # not exactly 2000 as the '`' character is used six times and \n takes two spaces as well so 2000 - 8 has to be used.
+
+    with open('files/logs.log') as f:
+        if fsize < n:
+            n = fsize
+        
+        else:
+            f.seek(fsize - n) 
+        fetched_lines = f.readlines()
+
+        await interaction.response.send_message(f"```\n{''.join(fetched_lines)}```")
+
 
 
 @client.event

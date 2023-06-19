@@ -37,17 +37,17 @@ def embed_notification(info_dict : dict) -> discord.Embed:
         stream_url = info_dict['original_url']
         avatar_url = info_dict['avatar_url']
         thumbnail = info_dict['thumbnail']
-        fieldvalue = f"{info_dict['fulltitle']} with **{info_dict['concurrent_view_count']}** viewers!"
+        fieldvalue = f"{info_dict['fulltitle']}"
 
         if info_dict['platform'] == 'youtube':
-            fieldname = 'Streaming on YouTube!'
+            fieldname = f"Streaming on YouTube with **{info_dict['concurrent_view_count']}** viewers!"
         
         else:
-            fieldname = f'Playing **__{info_dict["category_name"]}__**'
+            fieldname = f'Playing **__{info_dict["category_name"]}__** with **{info_dict["concurrent_view_count"]}** viewers!'
 
         
 
-        embed_notif = discord.Embed(title=f'Stream is now live with {name}!', color=0x00ff00, url=stream_url)
+        embed_notif = discord.Embed(title=f'{name} has started a stream!', color=0x00ff00, url=stream_url)
         embed_notif.set_author(name=name, icon_url=avatar_url)
         embed_notif.set_image(url=thumbnail)
         embed_notif.add_field(name=fieldname, value=fieldvalue)
@@ -64,7 +64,7 @@ def embed_notification(info_dict : dict) -> discord.Embed:
         avatar_url = info_dict['avatar_url']
         thumbnail_url = info_dict['thumbnail']
 
-        embed_notif = discord.Embed(title=f'A stream has been scheduled!', color=0xff0000, url=stream_url)
+        embed_notif = discord.Embed(title=f'{name} has scheduled a stream!', color=0xff0000, url=stream_url)
         embed_notif.set_author(name=name, icon_url=avatar_url)
         embed_notif.set_image(url=thumbnail_url)
         embed_notif.add_field(name=fieldname, value=fieldvalue)

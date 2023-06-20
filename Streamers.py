@@ -184,7 +184,6 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
             info_dict['uploader_url'] = url.replace('/live', '')
         
     # Add live status and previously recorded live stream status to video information
-    info_dict['release_timestamp'] = 'in_moments'
     info_dict['recorded_live_status'] = recorded_activity
     info_dict['platform'] = platform
     info_dict['name'] = raw_streamer_data[2]

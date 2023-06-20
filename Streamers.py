@@ -165,7 +165,11 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
                 # This is important because _fetch_avatar_url takes a long time depending on whether it is scraping or not and whether Twitch servers are feeling good or not.
             
             if info_dict['live_status'] == "is_upcoming":
-                if (((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600) > 24): # Avoid scheduled streams that will start in over 24 hours
+                if info_dict['release_timestamp'] == None: # When a Live stream gets close to being live YT no longer gives us a specific time to work with so release_timestamp will be a NoneType.
+                    info_dict['release_timestamp'] = 'in_moments' # I know this is not a timestamp but it'll work i guess. Also this is a scheduled notification meaning we won't be notified twice if this has been scheduled for a while.
+
+
+                elif (((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600) > 24): # Avoid scheduled streams that will start in over 24 hours
                     info_dict['live_status'] = 'not_live'
                     log_wp.info("Scheduled stream will start in over 24 hours so we will set it to not_live and ignore it.") # This does mean that avatar will be generated everytime though.
             
@@ -180,6 +184,7 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
             info_dict['uploader_url'] = url.replace('/live', '')
         
     # Add live status and previously recorded live stream status to video information
+    info_dict['release_timestamp'] = 'in_moments'
     info_dict['recorded_live_status'] = recorded_activity
     info_dict['platform'] = platform
     info_dict['name'] = raw_streamer_data[2]

@@ -59,10 +59,15 @@ def embed_notification(info_dict : dict) -> discord.Embed:
         
         name = info_dict['uploader']
         fieldvalue = info_dict['fulltitle']
-        fieldname = f"**__Starting in {round(((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600), 1)} hours!__**"
         stream_url = info_dict['original_url']
         avatar_url = info_dict['avatar_url']
         thumbnail_url = info_dict['thumbnail']
+
+        if info_dict['release_timestamp'] == 'in_moments':
+            fieldvalue = f"**__Stream is starting shortly!__**"
+        
+        else:
+            fieldname = f"**__Starting in {round(((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600), 1)} hours!__**"
 
         embed_notif = discord.Embed(title=f'{name} has scheduled a stream!', color=0xff0000, url=stream_url)
         embed_notif.set_author(name=name, icon_url=avatar_url)

@@ -167,7 +167,7 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
             if info_dict['live_status'] == "is_upcoming":
                 if info_dict['release_timestamp'] == None: # When a Live stream gets close to being live YT no longer gives us a specific time to work with so release_timestamp will be a NoneType.
                     info_dict['release_timestamp'] = 'in_moments' # I know this is not a timestamp but it'll work i guess. Also this is a scheduled notification meaning we won't be notified twice if this has been scheduled for a while.
-
+                    log_wp.infO('no release_timestamp given despite an upcoming stream. Set to starting in a few moments.')
 
                 elif (((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600) > 24): # Avoid scheduled streams that will start in over 24 hours
                     info_dict['live_status'] = 'not_live'

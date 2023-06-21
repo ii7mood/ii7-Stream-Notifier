@@ -39,6 +39,8 @@ def send_data(data : dict, servers : dict) -> None:
     Checks if the server is accepting data before attempting to write to it.
     Then waits for a reply confirming that the client is done processing the data.
     Then awaits a reply from the server to confirm that it is done processing the data.
+
+    servers is a dict that contains a key which is the server type (i.e DISCORD or PUSHOVER) and its value is the socket object.
     """
 
     for server in servers.items():
@@ -59,13 +61,7 @@ def send_data(data : dict, servers : dict) -> None:
                 connection.close()
 
                 sleep(2) # Give time for server to bind before we attempt to connect to it.
-                reconnect_server = establish_connection(server_type)
-
-                if reconnect_server[0]:
-                    servers[server_type] = reconnect_server
-
-                else:
-                    log_wp.warning("Failed to re-establish the connection. Did the sever close?")
+                servers = initialize_servers()
 
         except TimeoutError:
             log_wp.warning(f"Connection timed out. No reply from {server_type}. Moving on..")

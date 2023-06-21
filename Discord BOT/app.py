@@ -62,9 +62,10 @@ def embed_notification(info_dict : dict) -> discord.Embed:
         stream_url = info_dict['original_url']
         avatar_url = info_dict['avatar_url']
         thumbnail_url = info_dict['thumbnail']
+        fieldname = ''
 
         if info_dict['release_timestamp'] == 'in_moments':
-            fieldvalue = f"**__Stream is starting shortly!__**"
+            fieldname = f"**__Stream is starting shortly!__**"
         
         else:
             fieldname = f"**__Starting in {round(((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600), 1)} hours!__**"
@@ -121,6 +122,9 @@ def start_listening(conn : socket.socket.accept = None):
     except EOFError:
         log_wp.warning("DISCORD did not receive any data as the connection shut down unexpectedly")
         return None, None
+
+    except Exception as e:
+        log_wp.warning(e) # This will help catch exceptions that are not already handled and log it.
 
     return data, conn
 

@@ -220,6 +220,3 @@ def update_streamer(url : str, current_activity : str) -> None:
     )
     db.commit()
     log_wp.info("Streamer information updated within database")
-
-x = fetch_streamer(['https://www.youtube.com/channel/UC2fdnDywhuPg6uK0bYs4J5Q', 'not_live', 'ii7'])
-print(x)

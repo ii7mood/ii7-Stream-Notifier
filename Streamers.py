@@ -158,7 +158,7 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
             info_dict = ytd.extract_info(url)
         
         except yt_dlp.DownloadError as e:
-            if 'Unable to recognize tab page' in e:
+            if 'Unable to recognize tab page' in str(e):
                 fetch_streamer(raw_streamer_data) # Error on YouTube side, attempts to extract info again.
             else:
                 info_dict = None

@@ -145,7 +145,6 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
     
     # Set up options for yt-dlp extractor
     yt_dlp_args = {
-        'ignoreerrors': True, # Continue extracting info even if no playable stream is found
         'quiet': True, # Suppress non-error output
         'skip_download': True, # Don't download any media
         'playlist_items': '0', # Only look at first item in playlist (for efficiency)

@@ -155,7 +155,14 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
 
     # Use yt-dlp to extract video information from URL
     with yt_dlp.YoutubeDL(yt_dlp_args) as ytd:
-        info_dict = ytd.extract_info(url)
+        try:
+            info_dict = ytd.extract_info(url)
+        
+        except yt_dlp.DownloadError as e:
+            if 'Unable to recognize tab page' in e:
+                fetch_streamer(raw_streamer_data) # Error on YouTube side, attempts to extract info again.
+            else:
+                info_dict = None
 
         if info_dict != None:
             log_wp.info(f"Stream found. Status: {info_dict['live_status']}")
@@ -220,3 +227,7 @@ def update_streamer(url : str, current_activity : str) -> None:
     )
     db.commit()
     log_wp.info("Streamer information updated within database")
+
+
+x = fetch_streamer(['https://www.youtube.com/@rinpenrose', 'not_live', 'moist'])
+print(x)

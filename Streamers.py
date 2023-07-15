@@ -158,7 +158,7 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
             info_dict = ytd.extract_info(url)
         
         except yt_dlp.DownloadError as e:
-            if 'The channel is not currently live' in e:
+            if 'The channel is not currently live' in str(e):
                 info_dict = None
             
             else:

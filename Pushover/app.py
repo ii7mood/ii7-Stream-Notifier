@@ -51,7 +51,13 @@ while True:
         
         elif info_dict['live_status'] == 'is_upcoming':
             avatar = requests.get(info_dict['avatar_url']).content
-            message = f"{info_dict['uploader']} has scheduled a stream to start in {int((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600)} hours!"
+
+            if info_dict['release_timestamp'] == 'in_moments':
+                message = f"{info_dict['uploader']} has scheduled a stream that is starting shortly!"
+            
+            else:
+                message = f"{info_dict['uploader']} has scheduled a stream to start in {round(((info_dict['release_timestamp'] - datetime.timestamp(datetime.now())) / 3600), 1)} hours!"
+
             send_notification(
                 message=message,
                 url=info_dict['original_url'],

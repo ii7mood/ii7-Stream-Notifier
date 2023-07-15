@@ -158,9 +158,11 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
             info_dict = ytd.extract_info(url)
         
         except yt_dlp.DownloadError as e:
-            if 'Unable to recognize tab page' in str(e):
-                info_dict = fetch_streamer(raw_streamer_data) # Error on YouTube side, attempts to extract info again.
+            if 'The channel is not currently live' in e:
+                info_dict = None
+            
             else:
+                log_wp.error(e + '\n Setting live_status to offline')
                 info_dict = None
 
         if info_dict != None:

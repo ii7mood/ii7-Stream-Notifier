@@ -3,18 +3,18 @@
 
 A personal project I quickly cooked up as I - before this - used a deprecated version of Discord.py that was held together by two pieces of duct tape.
 Now I know I am not an amazing programmer so if there any changes or ways to improve the code please do let me know. (I guess create an issue?)
-Personally, I think that Discord has recently made a series of bad decisions (Username update anyone?) and soon enough they might attempt to monetise their API usage; similar to Reddit. So to combat this I will do the following:
-- Implement KDE support
-- (optional) Implement Windows support
-- (optional) Guilded support
+Personally, I think that Discord has recently made a series of bad decisions (Username update anyone?) and soon enough they might attempt to monetise their API usage; similar to Reddit. So I plan on somehow migrating to a webapp.
 
 Pushover is available on iOS & Android, it has a 30-day free trial and after that it has a $5 one-time purchase. This way I am not relying on any specific platform. For now though, this only works on Discord and Pushover.
+I will remove Pushover support once the webapp has been implemented as notifications can be sent via the webapp (since iOS 16.4 on Apple devices)
 
 Limitations:
 - Poorly written (probably)
 - Probably has tons of bugs.
+- Relies mostly on Discord (CLI does exist but it isn't that great)
+  
+![Untitled](https://github.com/ii7mood/ii7-Stream-Notifier/assets/86324776/5a6f978c-9ad8-477d-be65-ac43fab73e18)
 
-![Banner](https://github.com/ii7mood/ii7-Stream-Notifier/assets/86324776/2ecfe3e9-c4c0-4b10-be24-078171a55188)
 
 # Setting up
 
@@ -40,7 +40,7 @@ You will need Python installed (>= 3.9), and added to path. You will also need p
 
 
 ### [TWITCH]
-**NOTE**: You do not need to use the Twitch API so this does not need to be filled **so long as scrape = 1** however this does mean that the bot **will not tell you how many concurrent viewers are watching and instead display it as None (will make it show something else later) Otherwise follow the steps specified and ignore access_token as that will be generated automatically**.
+**NOTE**: You do not need to use the Twitch API so this does not need to be filled **so long as scrape = 1** however this does mean that the bot cannot display the number of concurrent viewers or use the streamer's avatar instead it will display Twitch's logo. otherwise do follow these steps for the full set of features.
 
 1) Go to https://dev.twitch.tv/ and log-in with your Twitch account.
 2) Click on "Your Console" next to your profile in the top-right corner and then click "Register Your Application".
@@ -49,6 +49,13 @@ You will need Python installed (>= 3.9), and added to path. You will also need p
 5) **MAKE SURE TO SET scrape to 0**
 
 **NOTE**: Keep the host and port their default values, unless Detector.py is hosted somewhere other than the local machine then you'll need to input the host (IP) and port that the listener would listen to, per listener. Otherwise, do not change it.<br>
+
+
+### ** [USAGE] **
+You can use the CLI to interact with the program by running ```python modify.py``` in the terminal, in the same directory as the bot. Be aware that the CLI only has the bare minimum commands unlike the BOTs commands.
+As for Discord you can simply type '/' and view all the commands and what each one does.
+```/reset activity``` resets all streamers' status to not_live meaning that within the next 5 minutes you will be notified of all streams again.
+```/reset database``` removes all streamers from the database meaning you will need to re-follow everyone again.
 
 
 

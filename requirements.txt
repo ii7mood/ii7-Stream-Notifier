@@ -1,5 +1,5 @@
 discord.py==2.2.3
 requests==2.31.0
-yt-dlp==2023.3.4
+yt-dlp==2023.7.6 
 configparser==5.3.0
 bs4

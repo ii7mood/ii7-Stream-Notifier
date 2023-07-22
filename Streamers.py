@@ -161,6 +161,16 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
             if 'The channel is not currently live' in str(e):
                 info_dict = None
             
+            elif 'Unable to recognize tab page' in str(e):
+                sleep(3) # I do not know why I added this, makes it feel 'safer' I guess.
+                info_dict = fetch_streamer(raw_streamer_data) # Technically this error can happen infinitly but that is VERY unlikely so :shrug:
+                return info_dict
+            
+            elif 'Unable to download JSON metadata' in str(e):
+                sleep(60) # This can happen when my proxy fails (do not know what 'fail' means) apparently it can happen from time to time. I guess 60s looks decent.
+                info_dict = fetch_streamer(raw_streamer_data)
+                return info_dict
+
             else:
                 log_wp.error(str(e) + '\n Setting live_status to offline')
                 info_dict = None

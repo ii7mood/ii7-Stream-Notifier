@@ -41,11 +41,11 @@ async def follow(interaction: discord.Interaction, name : str, url : str) -> Non
         await interaction.response.send_message(f"Duplicate detected, make sure this streamer has a unique name and is not already followed!")
 
     if url[-1] == "/":
-        interaction.response.send_message("Make sure to leave the URL *without any forward-slashs at the end*")
+        await interaction.response.send_message("Make sure to leave the URL *without any forward-slashs at the end*")
         return
     
     if not("www" in url):
-        interaction.response.send_message("Make sure that the url includes a 'www.' otherwise twitch pisses itself")
+        await interaction.response.send_message("Make sure that the url includes a 'www.' otherwise twitch pisses itself")
         return
 
     cursor.execute(f"INSERT INTO streamers (URL, RECORDED_ACTIVITY, NAME) VALUES (?, ?, ?)", (url, "not_live", name.lower()))

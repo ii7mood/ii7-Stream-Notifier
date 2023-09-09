@@ -191,6 +191,13 @@ def fetch_streamer(raw_streamer_data: list) -> dict:
                     info_dict['live_status'] = 'not_live'
                     log_wp.info("Scheduled stream will start in over 24 hours so we will set it to not_live and ignore it.") # This does mean that avatar will be generated everytime though.
             
+            # 09/09/2023
+            # Upon ending a livestream youtube now uses 'post_live' to indicate that a stream has ended
+            # I am not sure if this is set temporarily or if it has special conditions wherein it is used
+            # As far as I know we do not really care about that so we will instead just set live_status to not_live.
+            elif info_dict['live_status'] == 'post_live':
+                info_dict['live_status'] = 'not_live'
+
             if (platform == "twitch") and (info_dict['live_status'] == 'is_live'): # With YouTube viewer count is extracted automatically while Twitch not. So we will extract it manually using Twitch API. (if enabled)
                 twitch_ext = _fetch_twitch_information(url, stream_info=True)
                 info_dict['concurrent_view_count'] = twitch_ext[0]

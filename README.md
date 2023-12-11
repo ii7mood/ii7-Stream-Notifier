@@ -20,7 +20,7 @@ Limitations:
 
 ## Necessary Modules
 You will need Python installed (>= 3.9), and added to path. You will also need pip properly configured (test by simply running pip in your terminal). (if you can run ```python --version``` (with an output of > 3.9) and ```pip``` without errors then you're good to continue.)
-1) (optional) Set-up a virtual environment by running ```python -m venv venv``` while you are in the root folder ii7-Stream-Notifier. Depending on your installation you might need to substitute python for python3 or python3.9 (depends on the version installed).
+1) (optional) Set-up a virtual environment by running ```python -m venv venv``` while you are in the root folder ii7-Stream-Notifier. Depending on your installation you might need to substitute python for python3 or python3.9 (depends on the version installed). Then ```source venv/bin/activate``` to interact with the virtual environment.
 2) Run the command ```pip install -r requirements.txt```
 
 
